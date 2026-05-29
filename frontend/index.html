@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ResumeCraft — Build Your Resume</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <span class="brand-icon">✦</span>
+      <span class="brand-name">ResumeCraft</span>
+    </div>
+    <div class="topbar-actions">
+      <button class="btn-preview" onclick="previewResume()">👁 Preview</button>
+      <button class="btn-download" onclick="downloadPDF()">
+        <span class="btn-icon">↓</span> Download PDF
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <!-- ───────── FORM PANEL ───────── -->
+  <main class="form-panel" id="formPanel">
+    <form id="resumeForm" onsubmit="return false;">
+
+      <!-- TEMPLATE SELECTION -->
+      <section class="card">
+        <h2 class="card-title">✦ Choose Template</h2>
+        <div class="template-grid">
+          <label class="template-opt" data-t="classic">
+            <input type="radio" name="template" value="classic" checked/>
+            <div class="template-swatch t-classic">
+              <div class="ts-name">JOHN DOE</div>
+              <div class="ts-line"></div>
+              <div class="ts-block"></div>
+              <div class="ts-block short"></div>
+            </div>
+            <span>Classic</span>
+          </label>
+          <label class="template-opt" data-t="modern">
+            <input type="radio" name="template" value="modern"/>
+            <div class="template-swatch t-modern">
+              <div class="ts-name">JOHN DOE</div>
+              <div class="ts-line"></div>
+              <div class="ts-block"></div>
+              <div class="ts-block short"></div>
+            </div>
+            <span>Modern</span>
+          </label>
+          <label class="template-opt" data-t="minimal">
+            <input type="radio" name="template" value="minimal"/>
+            <div class="template-swatch t-minimal">
+              <div class="ts-name">JOHN DOE</div>
+              <div class="ts-line"></div>
+              <div class="ts-block"></div>
+              <div class="ts-block short"></div>
+            </div>
+            <span>Minimal</span>
+          </label>
+          <label class="template-opt" data-t="bold">
+            <input type="radio" name="template" value="bold"/>
+            <div class="template-swatch t-bold">
+              <div class="ts-name-bold">JOHN DOE</div>
+              <div class="ts-block"></div>
+              <div class="ts-block short"></div>
+            </div>
+            <span>Bold</span>
+          </label>
+        </div>
+      </section>
+
+      <!-- PERSONAL DETAILS -->
+      <section class="card">
+        <h2 class="card-title">👤 Personal Details</h2>
+        <div class="form-grid two-col">
+          <div class="field required">
+            <label>Full Name *</label>
+            <input type="text" id="name" placeholder="e.g. Priya Sharma" required/>
+          </div>
+          <div class="field required">
+            <label>Email *</label>
+            <input type="email" id="email" placeholder="priya@example.com" required/>
+          </div>
+          <div class="field required">
+            <label>Phone *</label>
+            <input type="tel" id="phone" placeholder="+91 98765 43210" required/>
+          </div>
+          <div class="field">
+            <label>Location</label>
+            <input type="text" id="location" placeholder="Hyderabad, India"/>
+          </div>
+          <div class="field">
+            <label>LinkedIn URL</label>
+            <input type="url" id="linkedin" placeholder="https://linkedin.com/in/priya"/>
+          </div>
+          <div class="field">
+            <label>GitHub URL</label>
+            <input type="url" id="github" placeholder="https://github.com/priya"/>
+          </div>
+          <div class="field full-col">
+            <label>Personal Website / Portfolio</label>
+            <input type="url" id="website" placeholder="https://priyasharma.dev"/>
+          </div>
+        </div>
+      </section>
+
+      <!-- SUMMARY -->
+      <section class="card">
+        <h2 class="card-title">📝 Professional Summary</h2>
+        <div class="field">
+          <label>A 2–4 sentence career overview</label>
+          <textarea id="summary" rows="4" placeholder="Results-driven software engineer with 5+ years of experience in full-stack development..."></textarea>
+        </div>
+      </section>
+
+      <!-- WORK EXPERIENCE -->
+      <section class="card">
+        <h2 class="card-title">💼 Work Experience</h2>
+        <div id="expList"></div>
+        <button type="button" class="btn-add" onclick="addExperience()">+ Add Experience</button>
+      </section>
+
+      <!-- EDUCATION -->
+      <section class="card">
+        <h2 class="card-title">🎓 Education</h2>
+        <div id="eduList"></div>
+        <button type="button" class="btn-add" onclick="addEducation()">+ Add Education</button>
+      </section>
+
+      <!-- SKILLS -->
+      <section class="card">
+        <h2 class="card-title">⚡ Skills</h2>
+        <div class="field">
+          <label>Add skills (press Enter or comma to add)</label>
+          <div class="skill-input-wrap">
+            <div class="skill-tags" id="skillTags"></div>
+            <input type="text" id="skillInput" placeholder="e.g. JavaScript, React, Python…" onkeydown="handleSkillKey(event)"/>
+          </div>
+          <span class="hint">Press <kbd>Enter</kbd> or <kbd>,</kbd> to add each skill</span>
+        </div>
+      </section>
+
+      <!-- PROJECTS -->
+      <section class="card">
+        <h2 class="card-title">🚀 Projects <span class="optional">(optional)</span></h2>
+        <div id="projList"></div>
+        <button type="button" class="btn-add" onclick="addProject()">+ Add Project</button>
+      </section>
+
+      <!-- CERTIFICATIONS -->
+      <section class="card">
+        <h2 class="card-title">🏅 Certifications <span class="optional">(optional)</span></h2>
+        <div id="certList"></div>
+        <button type="button" class="btn-add" onclick="addCertification()">+ Add Certification</button>
+      </section>
+
+      <!-- ACTIONS -->
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" onclick="clearForm()">🗑 Clear All</button>
+        <button type="button" class="btn-preview" onclick="previewResume()">👁 Preview Resume</button>
+        <button type="button" class="btn-primary" onclick="downloadPDF()">
+          <span>↓</span> Download PDF
+        </button>
+      </div>
+    </form>
+  </main>
+
+  <!-- ───────── PREVIEW PANEL ───────── -->
+  <aside class="preview-panel" id="previewPanel">
+    <div class="preview-header">
+      <span>Live Preview</span>
+      <button class="close-preview" onclick="closePreview()">✕</button>
+    </div>
+    <div class="preview-body">
+      <iframe id="previewFrame" title="Resume Preview"></iframe>
+    </div>
+  </aside>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <iframe id="modalFrame" title="Full Preview"></iframe>
+    <div class="modal-footer">
+      <button onclick="closeModal()" class="btn-secondary">Close</button>
+      <button onclick="downloadPDF()" class="btn-primary">↓ Download PDF</button>
+    </div>
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
